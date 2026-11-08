@@ -1,8 +1,16 @@
 # safex-password-vault
-A no-nonsense password vault developed using the LAMP stack, with admittedly poor-quality HTML/CSS/JS code.
+A no-nonsense password vault developed using the LAMP stack with security as primary focus, with admittedly poor frontend.
 
 # SafeX
 https://github.com/user-attachments/assets/edcb6bf7-7cc4-47a0-bbd6-ed464a0a4f25
+
+## Security Focus
+
+- Passwords hashed with bcrypt (`password_hash`), never stored in plaintext.
+- Usernames and password hashes encrypted at rest with AES-256-CBC before being written to the database.
+- All SQL queries use prepared statements preventing SQLi.
+- Strict Input validation on client side and server side
+- Session ID regenerated on login to prevent session fixation.
 
 # Installation and Setup
 
