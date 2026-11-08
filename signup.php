@@ -1,8 +1,6 @@
 <?php
 
 session_start();
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 
 require 'db_config_signup.php';
 require 'encryption.php';
@@ -14,6 +12,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $error_message='';
 
+    // regex from client side validation
+    $userRegex = '/^\w{8,30}$/';
+    $passRegex = '/^(?=(.*[A-Z]){2})(?=(.*\d){2})(?=(.*[^\w\s]){2})[\S]{16,30}$/';
+
+    if (!preg_match($userRegex, $username)) {
+        $_SESSION['error_message'] = "Invalid username!";
+        header("Location: signup.php");
+        exit;
+    }
+    if (!preg_match($passRegex, $password)) {
+        $_SESSION['error_message'] = "Password does not meet requirements!";
+        header("Location: signup.php");
+        exit;
+    }
+    
     $query1 = "SELECT username FROM users;";
     $result1 = $conn->query($query1);
     if ($result1->num_rows > 0){
@@ -319,7 +332,7 @@ function validateForm(){
     let result = true;
     let re1 = /^\w{8,30}$/;
     // let re2 = /^(?=(.*[A-Z]){2})(?=(.*\d){2})(?=(.*[^\w\s_]){2})[\S]{16,30}$/; // external regex
-    let re2 = /^(?=(.*[A-Z]){2})(?=(.*\d){2})(?=(.*[^\w\s]){2})[\S]{16,30}$/; // your regex // make sure to revise
+    let re2 = /^(?=(.*[A-Z]){2})(?=(.*\d){2})(?=(.*[^\w\s]){2})[\S]{16,30}$/; // your regex 
     if (!re1.test(username.value) || username.value.trim() == ""){
         usernameError.innerHTML = "Enter valid username";
         result = false;
